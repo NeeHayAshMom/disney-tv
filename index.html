@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>The Nachtweih Family Resort VIP TV</title>
+
 
 <style>
 
@@ -14,8 +16,8 @@
 --gold:#ffd86b;
 --night:#020817;
 --blue:#07152f;
---panel:rgba(10,25,55,.85);
---white:#ffffff;
+--panel:rgba(5,18,45,.85);
+--purple:#8b5cf6;
 
 }
 
@@ -40,18 +42,16 @@ color:white;
 
 background:
 
-radial-gradient(
-circle at top,
-#294b91 0%,
-#07152f 45%,
-#020817 100%
+linear-gradient(
+180deg,
+#162b5c,
+#020817
 );
 
 }
 
 
-
-/* Star field */
+/* MAGIC KINGDOM NIGHT SKY */
 
 body:before {
 
@@ -61,7 +61,7 @@ position:fixed;
 
 inset:0;
 
-background-image:
+background:
 
 radial-gradient(
 white 1px,
@@ -69,14 +69,11 @@ transparent 1px
 );
 
 background-size:
-90px 90px;
+75px 75px;
 
 opacity:.15;
 
-pointer-events:none;
-
 }
-
 
 
 /* APP */
@@ -89,11 +86,16 @@ display:flex;
 
 flex-direction:column;
 
+position:relative;
+
+z-index:1;
+
 }
 
 
 
 /* HEADER */
+
 
 .header {
 
@@ -105,9 +107,10 @@ justify-content:space-between;
 
 align-items:center;
 
-padding:0 45px;
+padding:0 40px;
 
 background:
+
 rgba(0,0,0,.35);
 
 border-bottom:
@@ -148,7 +151,7 @@ display:none;
 
 flex:1;
 
-padding:45px;
+padding:35px;
 
 }
 
@@ -170,11 +173,11 @@ height:100%;
 
 display:flex;
 
-flex-direction:column;
-
 justify-content:center;
 
 align-items:center;
+
+flex-direction:column;
 
 text-align:center;
 
@@ -185,17 +188,14 @@ text-align:center;
 
 font-size:60px;
 
-margin:10px;
-
-text-shadow:
-0 5px 20px black;
+margin:5px;
 
 }
 
 
 .welcome h2 {
 
-font-size:34px;
+font-size:32px;
 
 color:var(--gold);
 
@@ -211,7 +211,7 @@ font-weight:900;
 
 color:var(--gold);
 
-margin:25px;
+margin:20px;
 
 }
 
@@ -223,6 +223,7 @@ margin:25px;
 .panel {
 
 background:
+
 var(--panel);
 
 border:
@@ -237,9 +238,9 @@ padding:30px;
 box-shadow:
 
 0 15px 40px
-rgba(0,0,0,.45);
+rgba(0,0,0,.5);
 
-font-size:26px;
+font-size:24px;
 
 }
 
@@ -250,11 +251,11 @@ font-size:26px;
 
 .board-title {
 
-font-size:42px;
+font-size:40px;
 
 color:var(--gold);
 
-margin-bottom:25px;
+margin-bottom:20px;
 
 }
 
@@ -264,8 +265,7 @@ margin-bottom:25px;
 display:grid;
 
 grid-template-columns:
-
-1fr 220px;
+1fr 180px;
 
 gap:12px;
 
@@ -276,13 +276,13 @@ gap:12px;
 
 background:
 
-rgba(255,255,255,.08);
+rgba(255,255,255,.1);
 
 padding:18px;
 
 border-radius:12px;
 
-font-size:30px;
+font-size:28px;
 
 }
 
@@ -347,7 +347,7 @@ text-align:center;
 
 .piano h1 {
 
-font-size:70px;
+font-size:65px;
 
 color:#ffb6d9;
 
@@ -355,7 +355,36 @@ color:#ffb6d9;
 
 
 
-/* CHANNEL BAR */
+/* BUTTONS */
+
+
+button {
+
+background:var(--gold);
+
+border:none;
+
+border-radius:18px;
+
+padding:16px 35px;
+
+font-size:24px;
+
+font-weight:bold;
+
+}
+
+
+
+button:active {
+
+transform:scale(.95);
+
+}
+
+
+
+/* NAV BAR */
 
 
 .channel-bar {
@@ -368,26 +397,29 @@ justify-content:center;
 
 align-items:center;
 
-gap:35px;
+gap:30px;
 
 background:
 
-rgba(0,0,0,.4);
+rgba(0,0,0,.45);
 
 }
+
 
 
 .channel {
 
 padding:
 
-15px 30px;
+15px 25px;
 
 border-radius:25px;
 
-font-size:25px;
+font-size:24px;
 
 color:#ddd;
+
+cursor:pointer;
 
 }
 
@@ -395,7 +427,9 @@ color:#ddd;
 
 .channel.selected {
 
-background:var(--gold);
+background:
+
+var(--gold);
 
 color:black;
 
@@ -407,24 +441,21 @@ box-shadow:
 
 
 
-/* BUTTONS */
+
+/* TV VIDEO AREA */
 
 
-button {
+.video-area {
 
-font-size:24px;
+width:90%;
 
-padding:15px 35px;
+height:60vh;
 
-border-radius:15px;
+background:black;
 
-border:none;
+border-radius:20px;
 
-background:var(--gold);
-
-font-weight:bold;
-
-cursor:pointer;
+margin:auto;
 
 }
 
@@ -435,11 +466,11 @@ cursor:pointer;
 </head>
 
 
+
 <body>
 
 
 <div id="app">
-
 
 
 <header class="header">
@@ -450,6 +481,7 @@ cursor:pointer;
 ✨ Nachtweih Family Resort VIP ✨
 
 </div>
+
 
 
 <div class="status">
@@ -473,9 +505,6 @@ Orlando, FL
 
 
 
-<!-- HOME SCREEN -->
-
-
 <section id="home" class="screen active">
 
 
@@ -494,7 +523,6 @@ Welcome Home
 Your Magic Kingdom Adventure Awaits
 
 </h2>
-
 
 
 <div id="countdown" class="countdown">
@@ -517,11 +545,11 @@ Your Magic Kingdom Adventure Awaits
 
 <br>
 
-🟣 Journey Into Imagination with Figment
+🟣 Figment
 
 <br>
 
-🎭 Villains Experiences
+🎭 Villains
 
 <br>
 
@@ -540,9 +568,6 @@ Your Magic Kingdom Adventure Awaits
 
 
 
-<!-- WAIT BOARD -->
-
-
 <section id="waits" class="screen">
 
 
@@ -556,23 +581,7 @@ Your Magic Kingdom Adventure Awaits
 </div>
 
 
-
-<div class="wait-grid">
-
-
-<div class="wait-row">
-
-Loading VIP favorites...
-
-</div>
-
-
-<div class="wait-row wait-time">
-
--- min
-
-</div>
-
+<div id="wait-grid" class="wait-grid">
 
 </div>
 
@@ -584,10 +593,6 @@ Loading VIP favorites...
 
 
 
-
-
-
-<!-- FIREWORKS -->
 
 
 <section id="fireworks" class="screen">
@@ -615,13 +620,19 @@ Magic Kingdom Nighttime Spectacular
 
 <div class="panel">
 
-Select to watch fireworks
+
+Next Showing
+
+<br><br>
+
+
+9:00 PM
 
 
 <br><br>
 
 
-<button>
+<button id="watch-fireworks">
 
 WATCH FIREWORKS
 
@@ -643,11 +654,6 @@ WATCH FIREWORKS
 
 
 
-
-
-<!-- PIANO -->
-
-
 <section id="piano" class="screen">
 
 
@@ -666,18 +672,18 @@ WATCH FIREWORKS
 
 <h2>
 
-Live Jazz & Piano Experience
+Disney Resort Jazz & Piano
 
 </h2>
 
 
 <div class="panel">
 
-Disney Resort Lounge
+Relaxing evening atmosphere
 
 <br><br>
 
-Relax and enjoy the evening
+VIP Lounge Mode
 
 
 </div>
@@ -690,74 +696,51 @@ Relax and enjoy the evening
 
 
 </section>
-
-
-
-
-
-
-<!-- NAVIGATION -->
-
+<!-- CHANNEL BAR -->
 
 <div class="channel-bar">
 
-
-<div class="channel selected">
-
+<div class="channel selected" data-channel="0">
 HOME
-
 </div>
 
-
-<div class="channel">
-
+<div class="channel" data-channel="1">
 WAIT TIMES
-
 </div>
 
-
-<div class="channel">
-
+<div class="channel" data-channel="2">
 FIREWORKS
-
 </div>
 
-
-<div class="channel">
-
+<div class="channel" data-channel="3">
 PIANO BAR
+</div>
 
 </div>
 
 
 </div>
 
-
-
-
-</div>
 
 <script>
-
-const channels = [
-    "home",
-    "waits",
-    "fireworks",
-    "piano"
-];
-
-let currentChannel = 0;
 
 
 /*
 ========================
-TRIP SETTINGS
+NACHTWEIH VIP TV ENGINE
 ========================
 */
 
-let tripDate =
-localStorage.getItem("tripDate")
-|| "2026-12-25";
+
+const screens = [
+"home",
+"waits",
+"fireworks",
+"piano"
+];
+
+
+let currentChannel = 0;
 
 
 
@@ -767,17 +750,22 @@ CLOCK
 ========================
 */
 
+
 function updateClock(){
 
-    const now = new Date();
+let now = new Date();
 
-    document.getElementById("clock").innerText =
-    now.toLocaleTimeString([], {
-        hour:"numeric",
-        minute:"2-digit"
-    });
+document.getElementById("clock")
+.innerText =
+now.toLocaleTimeString([],{
+
+hour:"numeric",
+minute:"2-digit"
+
+});
 
 }
+
 
 setInterval(updateClock,1000);
 
@@ -785,96 +773,142 @@ updateClock();
 
 
 
+
+
 /*
 ========================
-COUNTDOWN
+TRIP COUNTDOWN
 ========================
 */
 
+
+let tripDate =
+localStorage.getItem("tripDate")
+||
+"2026-12-25";
+
+
+
 function updateCountdown(){
 
-    const target =
-    new Date(tripDate);
 
-    const now =
-    new Date();
+let target =
+new Date(tripDate);
 
 
-    let days =
-    Math.ceil(
-        (target-now) /
-        (1000*60*60*24)
-    );
+let today =
+new Date();
 
 
-    if(days < 0){
-        days = 0;
-    }
+
+let days =
+Math.ceil(
+(target-today)
+/
+(1000*60*60*24)
+);
 
 
-    document.getElementById("countdown")
-    .innerText =
-    days + " Days";
+
+if(days < 0){
+
+days = 0;
 
 }
 
 
-setInterval(updateCountdown,60000);
+
+document.getElementById("countdown")
+.innerText =
+days + " Days";
+
+
+}
+
+
 
 updateCountdown();
+
+setInterval(
+updateCountdown,
+60000
+);
+
+
 
 
 
 /*
 ========================
-CHANNEL CONTROL
+CHANNEL SWITCHING
 ========================
 */
 
 
 function showChannel(number){
 
-    if(number < 0)
-        number = channels.length-1;
+
+if(number < 0){
+
+number =
+screens.length-1;
+
+}
 
 
-    if(number >= channels.length)
-        number = 0;
+if(number >= screens.length){
 
+number=0;
 
-
-    document
-    .querySelectorAll(".screen")
-    .forEach(screen=>{
-        screen.classList.remove("active");
-    });
-
-
-
-    document
-    .getElementById(channels[number])
-    .classList.add("active");
+}
 
 
 
-    document
-    .querySelectorAll(".channel")
-    .forEach((item,index)=>{
+document
+.querySelectorAll(".screen")
+.forEach(screen=>{
 
-        item.classList.toggle(
-            "selected",
-            index === number
-        );
+screen.classList.remove("active");
 
-    });
+});
 
 
-    currentChannel = number;
+
+document
+.getElementById(screens[number])
+.classList.add("active");
 
 
-    if(number === 1){
-        renderWaitBoard();
-    }
+
+
+document
+.querySelectorAll(".channel")
+.forEach((button,index)=>{
+
+
+button.classList.toggle(
+
+"selected",
+
+index===number
+
+);
+
+
+});
+
+
+
+currentChannel=number;
+
+
+
+if(number===1){
+
+renderWaitBoard();
+
+}
+
 
 }
 
@@ -882,17 +916,52 @@ function showChannel(number){
 
 function nextChannel(){
 
-    showChannel(currentChannel + 1);
+showChannel(currentChannel+1);
 
 }
-
 
 
 function previousChannel(){
 
-    showChannel(currentChannel - 1);
+showChannel(currentChannel-1);
 
 }
+
+
+
+
+
+/*
+========================
+IPHONE TOUCH CONTROLS
+========================
+*/
+
+
+document
+.querySelectorAll(".channel")
+.forEach(button=>{
+
+
+button.addEventListener(
+"click",
+function(){
+
+
+let channel =
+Number(
+this.dataset.channel
+);
+
+
+showChannel(channel);
+
+
+});
+
+
+});
+
 
 
 
@@ -930,7 +999,7 @@ break;
 
 case "Enter":
 
-selectChannel();
+selectCurrentChannel();
 
 break;
 
@@ -946,7 +1015,7 @@ break;
 
 case "v":
 
-openSettings();
+openVIPSettings();
 
 break;
 
@@ -961,20 +1030,20 @@ break;
 
 
 
-function selectChannel(){
+
+function selectCurrentChannel(){
 
 
-if(currentChannel === 2){
+if(currentChannel===2){
 
-    openFireworks();
+showFireworksPlayer();
 
 }
 
 
+if(currentChannel===3){
 
-if(currentChannel === 3){
-
-    openPiano();
+showPianoMode();
 
 }
 
@@ -987,13 +1056,57 @@ if(currentChannel === 3){
 
 /*
 ========================
+VIP SETTINGS
+========================
+*/
+
+
+function openVIPSettings(){
+
+
+let newDate =
+prompt(
+
+"Enter trip date YYYY-MM-DD",
+
+tripDate
+
+);
+
+
+
+if(newDate){
+
+
+tripDate=newDate;
+
+
+localStorage.setItem(
+
+"tripDate",
+
+tripDate
+
+);
+
+
+
+updateCountdown();
+
+
+}
+
+
+}
+
+ /*
+========================
 VIP WAIT BOARD
 ========================
 */
 
 
-const rides = [
-
+const vipRides = [
 
 {
 name:"👻 Haunted Mansion",
@@ -1001,13 +1114,11 @@ wait:25,
 favorite:true
 },
 
-
 {
 name:"🟣 Journey Into Imagination with Figment",
 wait:10,
 favorite:true
 },
-
 
 {
 name:"🏴‍☠️ Pirates of the Caribbean",
@@ -1015,20 +1126,23 @@ wait:20,
 favorite:false
 },
 
-
 {
 name:"🚀 TRON Lightcycle Run",
 wait:65,
 favorite:false
 },
 
-
 {
 name:"⛏ Seven Dwarfs Mine Train",
 wait:55,
 favorite:false
-}
+},
 
+{
+name:"🎢 Space Mountain",
+wait:45,
+favorite:false
+}
 
 ];
 
@@ -1039,7 +1153,7 @@ function renderWaitBoard(){
 
 
 const board =
-document.querySelector(".wait-grid");
+document.getElementById("wait-grid");
 
 
 if(!board)
@@ -1051,28 +1165,38 @@ board.innerHTML="";
 
 
 
-rides
-.sort((a,b)=>{
+vipRides
+.sort(function(a,b){
 
 
-if(a.favorite && !b.favorite)
+if(a.favorite && !b.favorite){
+
 return -1;
 
+}
 
-if(!a.favorite && b.favorite)
+
+if(!a.favorite && b.favorite){
+
 return 1;
+
+}
 
 
 return a.wait-b.wait;
 
 
 })
-.forEach(ride=>{
+.forEach(function(ride){
+
 
 
 board.innerHTML += `
 
+
 <div class="wait-row">
+
+${ride.favorite ? "⭐ " : ""}
 
 ${ride.name}
 
@@ -1085,7 +1209,9 @@ ${ride.wait} min
 
 </div>
 
+
 `;
+
 
 });
 
@@ -1100,14 +1226,15 @@ renderWaitBoard();
 
 
 
+
 /*
 ========================
-FIREWORKS CHANNEL
+FIREWORKS MODE
 ========================
 */
 
 
-function openFireworks(){
+function showFireworksPlayer(){
 
 
 document.getElementById("fireworks")
@@ -1115,6 +1242,7 @@ document.getElementById("fireworks")
 
 
 <div class="fireworks">
+
 
 <div>
 
@@ -1128,7 +1256,7 @@ document.getElementById("fireworks")
 
 <h2>
 
-Magic Kingdom
+Magic Kingdom Nighttime Spectacular
 
 </h2>
 
@@ -1137,41 +1265,42 @@ Magic Kingdom
 <div class="panel">
 
 
-Next Showing
-
-<br><br>
-
-
-9:00 PM
-
-
-<br><br>
-
-
-<button onclick="playFireworks()">
+<button onclick="launchFireworksVideo()">
 
 WATCH FIREWORKS
 
 </button>
 
 
+<br><br>
+
+
+Next Showing:
+
+<br>
+
+9:00 PM
+
 
 </div>
 
 
+
 </div>
+
 
 </div>
 
 
 `;
 
+
 }
 
 
 
 
-function playFireworks(){
+function launchFireworksVideo(){
 
 
 document.getElementById("fireworks")
@@ -1186,22 +1315,23 @@ document.getElementById("fireworks")
 
 <h1>
 
-🎆 Fireworks Mode
+🎆 Fireworks Player
 
 </h1>
 
 
-<div class="panel">
+<div class="video-area">
 
-Video source will be added here.
 
-<br><br>
+<!--
 
-This keeps the TV ready
-for a future stream link.
+Add your YouTube/live video embed here later
+
+-->
 
 
 </div>
+
 
 
 </div>
@@ -1220,12 +1350,12 @@ for a future stream link.
 
 /*
 ========================
-PIANO LOUNGE
+PIANO LOUNGE MODE
 ========================
 */
 
 
-function openPiano(){
+function showPianoMode(){
 
 
 document.getElementById("piano")
@@ -1247,22 +1377,31 @@ document.getElementById("piano")
 
 <h2>
 
-Live Jazz & Piano
+Live Jazz & Resort Piano
 
 </h2>
 
 
-
 <div class="panel">
 
-Disney Resort Lounge
+
+🌙 Evening Relaxation Mode
+
 
 <br><br>
 
-🍷 Evening relaxation mode
+
+Disney Resort Lounge Atmosphere
+
+
+<br><br>
+
+
+🎵 Music Player Ready
 
 
 </div>
+
 
 
 </div>
@@ -1278,88 +1417,17 @@ Disney Resort Lounge
 
 
 
-
 /*
 ========================
-VIP SETTINGS
-========================
-*/
-
-
-function openSettings(){
-
-
-let newDate =
-prompt(
-"Enter trip date YYYY-MM-DD",
-tripDate
-);
-
-
-
-if(newDate){
-
-
-tripDate = newDate;
-
-
-localStorage.setItem(
-"tripDate",
-tripDate
-);
-
-
-
-updateCountdown();
-
-
-}
-
-
-}
-
-
-
-
-/*
-========================
-STARTUP
+INITIALIZE
 ========================
 */
 
 
 showChannel(0);
 
-/*
-========================
-IPHONE TOUCH CONTROLS
-========================
-*/
 
-document.querySelectorAll(".channel").forEach((button, index) => {
-
-    button.addEventListener("click", function(){
-
-        showChannel(index);
-
-    });
-
-});
-
-
-document.querySelectorAll("button").forEach(button => {
-
-    button.addEventListener("click", function(){
-
-        selectChannel();
-
-    });
-
-});
-
-    
 </script>
-
 
 
 </body>
