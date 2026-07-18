@@ -1,127 +1,1340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>The Nachtweih Family Resort TV</title>
-    <style>
-        :root {
-            --panel-bg: rgba(22, 27, 38, 0.75);
-            --text-color: #f0f2f5;
-            --highlight: #ffdf00;
-            --mk-color: #8a2be2;
-            --ep-color: #00bfff;
-            --hs-color: #ff4500;
-            --ak-color: #2e8b57;
-        }
-        body { margin: 0; background-color: #0b0e14; background-position: center center; background-repeat: no-repeat; background-attachment: fixed; background-size: cover; color: var(--text-color); font-family: 'Segoe UI', sans-serif; overflow: hidden; height: 100vh; transition: background-image 1s ease-in-out; }
-        .navbar { display: flex; justify-content: center; background: rgba(17, 21, 29, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 15px; gap: 30px; border-bottom: 2px solid rgba(34, 43, 60, 0.5); position: relative; z-index: 10; }
-        .nav-item { font-size: 1.2rem; font-weight: bold; color: #a0aab8; padding: 5px 15px; border-radius: 20px; transition: 0.2s; cursor: pointer; }
-        .nav-item.active { color: #0b0e14; background: var(--highlight); box-shadow: 0 0 15px var(--highlight); }
-        .weather-badge { position: absolute; right: 25px; top: 18px; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; color: #a0aab8; }
-        .weather-temp { color: #fff; font-size: 1.3rem; font-weight: 800; }
-        .sub-navbar { display: flex; justify-content: center; gap: 15px; padding: 10px; background: rgba(22, 27, 38, 0.85); backdrop-filter: blur(5px); border-bottom: 1px solid rgba(34, 43, 60, 0.5); transform: translateY(-50px); opacity: 0; transition: all 0.3s ease; position: relative; z-index: 9; }
-        .sub-navbar.visible { transform: translateY(0); opacity: 1; }
-        .sub-item { font-size: 0.9rem; font-weight: bold; padding: 4px 12px; border-radius: 4px; color: #b0bbc8; cursor: pointer; }
-        .sub-item.active { color: #fff; background: rgba(255,255,255,0.2); }
-        .channel-view { display: none; height: calc(100vh - 140px); padding: 20px; box-sizing: border-box; }
-        .channel-view.active { display: block; }
-        .welcome-container { max-width: 800px; margin: 5vh auto 0 auto; background: var(--panel-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .resort-title { font-size: 3.2rem; font-weight: 800; color: #fff; text-shadow: 0px 4px 12px rgba(0,0,0,0.6); letter-spacing: 1px; }
-        .countdown { font-size: 4.5rem; font-weight: 900; color: var(--highlight); margin: 25px 0; cursor: pointer; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .sub-text { font-size: 1.3rem; color: #e0e6ed; }
-        .hint-text { font-size: 0.9rem; color: #a0aab8; margin-top: 15px; }
-        .settings-panel { display: none; background: #1c2333; border: 3px solid var(--highlight); padding: 20px; border-radius: 15px; width: 440px; margin: 20px auto 0 auto; box-shadow: 0 0 30px rgba(0,0,0,0.7); }
-        .settings-panel.visible { display: block; }
-        .settings-title { font-size: 1.1rem; color: #fff; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
-        .selectors { display: flex; justify-content: center; gap: 15px; align-items: center; }
-        .field-column { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .change-btn { background: #222b3c; border: none; color: #fff; padding: 5px 15px; font-size: 1.2rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
-        .change-btn:hover { background: #3b4861; }
-        .field-box { background: #11151d; padding: 10px 15px; border-radius: 8px; font-size: 1.4rem; font-weight: bold; border: 2px solid transparent; width: 60px; text-align: center; }
-        .field-box.selected { border-color: var(--highlight); color: var(--highlight); box-shadow: 0 0 10px rgba(255,223,0,0.3); }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; height: 100%; overflow-y: auto; align-content: start; opacity: 1; transition: opacity 0.4s ease-in-out; }
-        .grid-container.fade-out { opacity: 0; }
-        .ride-card { background: var(--panel-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid #ccc; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.05); }
-        .ride-card.MK { border-left-color: var(--mk-color); }
-        .ride-card.EP { border-left-color: var(--ep-color); }
-        .ride-card.HS { border-left-color: var(--hs-color); }
-        .ride-card.AK { border-left-color: var(--ak-color); }
-        .park-tag { font-size: 0.7rem; font-weight: bold; opacity: 0.6; margin-bottom: 3px; color: #fff; }
-        .ride-title { font-size: 0.95rem; font-weight: bold; line-height: 1.2; padding-right: 5px; color: #fff; }
-        .wait-badge { font-size: 1.6rem; font-weight: 900; background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 6px; color: #fff; }
-        .video-fullscreen { width: 100%; height: 100%; border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    </style>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Nachtweih Family Resort VIP TV</title>
+
+<style>
+
+:root {
+
+--gold:#ffd86b;
+--night:#020817;
+--blue:#07152f;
+--panel:rgba(10,25,55,.85);
+--white:#ffffff;
+
+}
+
+
+* {
+box-sizing:border-box;
+}
+
+
+body {
+
+margin:0;
+height:100vh;
+overflow:hidden;
+
+font-family:
+"Segoe UI",
+Arial,
+sans-serif;
+
+color:white;
+
+background:
+
+radial-gradient(
+circle at top,
+#294b91 0%,
+#07152f 45%,
+#020817 100%
+);
+
+}
+
+
+
+/* Star field */
+
+body:before {
+
+content:"";
+
+position:fixed;
+
+inset:0;
+
+background-image:
+
+radial-gradient(
+white 1px,
+transparent 1px
+);
+
+background-size:
+90px 90px;
+
+opacity:.15;
+
+pointer-events:none;
+
+}
+
+
+
+/* APP */
+
+#app {
+
+height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+
+
+/* HEADER */
+
+.header {
+
+height:90px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 45px;
+
+background:
+rgba(0,0,0,.35);
+
+border-bottom:
+
+2px solid
+rgba(255,216,107,.4);
+
+}
+
+
+.logo {
+
+font-size:34px;
+
+font-weight:900;
+
+color:var(--gold);
+
+}
+
+
+.status {
+
+font-size:22px;
+
+text-align:right;
+
+}
+
+
+
+/* SCREENS */
+
+
+.screen {
+
+display:none;
+
+flex:1;
+
+padding:45px;
+
+}
+
+
+.screen.active {
+
+display:block;
+
+}
+
+
+
+/* HOME */
+
+
+.welcome {
+
+height:100%;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+}
+
+
+.welcome h1 {
+
+font-size:60px;
+
+margin:10px;
+
+text-shadow:
+0 5px 20px black;
+
+}
+
+
+.welcome h2 {
+
+font-size:34px;
+
+color:var(--gold);
+
+}
+
+
+
+.countdown {
+
+font-size:75px;
+
+font-weight:900;
+
+color:var(--gold);
+
+margin:25px;
+
+}
+
+
+
+/* PANELS */
+
+
+.panel {
+
+background:
+var(--panel);
+
+border:
+
+2px solid
+rgba(255,216,107,.35);
+
+border-radius:24px;
+
+padding:30px;
+
+box-shadow:
+
+0 15px 40px
+rgba(0,0,0,.45);
+
+font-size:26px;
+
+}
+
+
+
+/* WAIT BOARD */
+
+
+.board-title {
+
+font-size:42px;
+
+color:var(--gold);
+
+margin-bottom:25px;
+
+}
+
+
+.wait-grid {
+
+display:grid;
+
+grid-template-columns:
+
+1fr 220px;
+
+gap:12px;
+
+}
+
+
+.wait-row {
+
+background:
+
+rgba(255,255,255,.08);
+
+padding:18px;
+
+border-radius:12px;
+
+font-size:30px;
+
+}
+
+
+.wait-time {
+
+color:var(--gold);
+
+font-weight:bold;
+
+text-align:right;
+
+}
+
+
+
+/* FIREWORKS */
+
+
+.fireworks {
+
+height:100%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+}
+
+
+.fireworks h1 {
+
+font-size:70px;
+
+color:var(--gold);
+
+}
+
+
+
+/* PIANO */
+
+
+.piano {
+
+height:100%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+text-align:center;
+
+}
+
+
+.piano h1 {
+
+font-size:70px;
+
+color:#ffb6d9;
+
+}
+
+
+
+/* CHANNEL BAR */
+
+
+.channel-bar {
+
+height:95px;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:35px;
+
+background:
+
+rgba(0,0,0,.4);
+
+}
+
+
+.channel {
+
+padding:
+
+15px 30px;
+
+border-radius:25px;
+
+font-size:25px;
+
+color:#ddd;
+
+}
+
+
+
+.channel.selected {
+
+background:var(--gold);
+
+color:black;
+
+box-shadow:
+
+0 0 25px var(--gold);
+
+}
+
+
+
+/* BUTTONS */
+
+
+button {
+
+font-size:24px;
+
+padding:15px 35px;
+
+border-radius:15px;
+
+border:none;
+
+background:var(--gold);
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+
+
+</style>
+
 </head>
+
+
 <body>
-    <div class="navbar">
-        <div class="nav-item active" id="menu-0" onclick="setChannelViaMouse(0)">RESORT HOME</div>
-        <div class="nav-item" id="menu-1" onclick="setChannelViaMouse(1)">PARK RIDES</div>
-        <div class="nav-item" id="menu-2" onclick="setChannelViaMouse(2)">TERRACE FIREWORKS</div>
-        <div class="nav-item" id="menu-3" onclick="setChannelViaMouse(3)">PIANO BAR</div>
-        <div class="weather-badge" id="disney-weather"><span>Orlando, FL: </span><span class="weather-temp" id="wdw-temp">--°F</span><span id="wdw-cond">| Live</span></div>
-    </div>
-    <div class="sub-navbar" id="park-filter-bar"><div class="sub-item active" id="filter-0" onclick="setParkViaMouse(0)">ALL PARKS</div><div class="sub-item" id="filter-1" onclick="setParkViaMouse(1)">MAGIC KINGDOM</div><div class="sub-item" id="filter-2" onclick="setParkViaMouse(2)">EPCOT</div><div class="sub-item" id="filter-3" onclick="setParkViaMouse(3)">HOLLYWOOD STUDIOS</div><div class="sub-item" id="filter-4" onclick="setParkViaMouse(4)">ANIMAL KINGDOM</div></div>
-    <div class="channel-view active" id="view-0"><div class="welcome-container"><div class="resort-title" onclick="toggleSettingsPanel()">Welcome to The Nachtweih Family Resort</div><div class="countdown" id="days-count" onclick="toggleSettingsPanel()">--- Days</div><div class="sub-text">Until Your Next Magical Adventure</div><div class="hint-text" id="panel-hint">Click numbers or press Enter/OK on remote to edit trip date</div><div class="settings-panel" id="settings-ui"><div class="settings-title">Adjust Vacation Target Date</div><div class="selectors"><div class="field-column"><button class="change-btn" onclick="adjustDateValuesMouse(0, 1)">+</button><div class="field-box selected" id="field-0">MM</div><button class="change-btn" onclick="adjustDateValuesMouse(0, -1)">-</button></div><div class="field-column"><button class="change-btn" onclick="adjustDateValuesMouse(1, 1)">+</button><div class="field-box" id="field-1">DD</div><button class="change-btn" onclick="adjustDateValuesMouse(1, -1)">-</button></div><div class="field-column"><button class="change-btn" onclick="adjustDateValuesMouse(2, 1)">+</button><div class="field-box" id="field-2">YYYY</div><button class="change-btn" onclick="adjustDateValuesMouse(2, -1)">-</button></div></div><button class="change-btn" style="margin-top: 15px; width: 100%; padding: 10px;" onclick="toggleSettingsPanel()">Save Settings</button></div></div></div>
-    <div class="channel-view" id="view-1"><div class="grid-container" id="live-board">Loading live cross-resort wait times...</div></div>
-    <div class="channel-view" id="view-2"><iframe class="video-fullscreen" src="https://youtube.com"></iframe></div>
-    <div class="channel-view" id="view-3"><iframe class="video-fullscreen" src="https://youtube.com"></iframe></div>
-    <script>
-        let currentChannel = 0; let currentParkFilter = 0; let allCachedRides = []; let isSettingsOpen = false; let selectedFieldIdx = 0; 
-        let configMonth = parseInt(localStorage.getItem('dw_month')) || 12; let configDay = parseInt(localStorage.getItem('dw_day')) || 25; let configYear = parseInt(localStorage.getItem('dw_year')) || 2026;
-        const PARKS = [{ id: '8215bb4d-7ae1-4af7-b4d2-bc8e20e8b284', code: 'MK' }, { id: '47f66d50-1830-49cb-99af-0b040449942a', code: 'EP' }, { id: '28ae2355-1d09-47d5-86ec-ec7b08b8b935', code: 'HS' }, { id: '1c33035c-ee1a-4780-aeaa-7bc47ac934c7', code: 'AK' }];
-        const PARK_CODES = ['ALL', 'MK', 'EP', 'HS', 'AK'];
-        
-        document.addEventListener('keydown', function(e) { 
-            if (e.key === 'Enter' && currentChannel === 0) { toggleSettingsPanel(); return; }
-            if (isSettingsOpen) handleSettingsInput(e.key); else handleStandardInput(e.key); 
-        });
-        
-        function handleStandardInput(key) { if (key === 'ArrowLeft') changeChannel(-1); else if (key === 'ArrowRight') changeChannel(1); else if (key === 'ArrowUp' && currentChannel === 1) changeParkFilter(-1); else if (key === 'ArrowDown' && currentChannel === 1) changeParkFilter(1); }
-        function handleSettingsInput(key) { if (key === 'ArrowLeft' || key === 'ArrowRight') { document.getElementById(field-${selectedFieldIdx}).classList.remove('selected'); selectedFieldIdx = (key === 'ArrowLeft' ? (selectedFieldIdx - 1 + 3) % 3 : (selectedFieldIdx + 1) % 3); document.getElementById(field-${selectedFieldIdx}).classList.add('selected'); } else if (key === 'ArrowUp') adjustDateValues(1); else if (key === 'ArrowDown') adjustDateValues(-1); }
-function setChannelViaMouse(target) { if (!isSettingsOpen) changeChannel(target - currentChannel); }
-function setParkViaMouse(target) { document.getElementById(filter-${currentParkFilter}).classList.remove('active'); currentParkFilter = target; document.getElementById(filter-${currentParkFilter}).classList.add('active'); renderRideGrid(); }
-function adjustDateValuesMouse(idx, amt) { document.getElementById(field-${selectedFieldIdx}).classList.remove('selected'); selectedFieldIdx = idx; document.getElementById(field-${selectedFieldIdx}).classList.add('selected'); adjustDateValues(amt); }
-function toggleSettingsPanel() {
-isSettingsOpen = !isSettingsOpen;
-const p = document.getElementById('settings-ui'), h = document.getElementById('panel-hint');
-p.classList.toggle('visible');
-h.innerText = isSettingsOpen ? "Click Save Settings or press Enter/OK to finalize" : "Click numbers or press Enter/OK on remote to edit trip date";
-if (!isSettingsOpen) { localStorage.setItem('dw_month', configMonth); localStorage.setItem('dw_day', configDay); localStorage.setItem('dw_year', configYear); setCountdown(); } else updateSettingsDisplay();
+
+
+<div id="app">
+
+
+
+<header class="header">
+
+
+<div class="logo">
+
+✨ Nachtweih Family Resort VIP ✨
+
+</div>
+
+
+<div class="status">
+
+Orlando, FL
+
+<br>
+
+<span id="clock">
+
+--:--
+
+</span>
+
+</div>
+
+
+</header>
+
+
+
+
+
+<!-- HOME SCREEN -->
+
+
+<section id="home" class="screen active">
+
+
+<div class="welcome">
+
+
+<h1>
+
+Welcome Home
+
+</h1>
+
+
+<h2>
+
+Your Magic Kingdom Adventure Awaits
+
+</h2>
+
+
+
+<div id="countdown" class="countdown">
+
+--- Days
+
+</div>
+
+
+
+<div class="panel">
+
+
+⭐ VIP Favorites
+
+<br><br>
+
+
+👻 Haunted Mansion
+
+<br>
+
+🟣 Journey Into Imagination with Figment
+
+<br>
+
+🎭 Villains Experiences
+
+<br>
+
+🍿 Sci-Fi Dine-In Theater
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- WAIT BOARD -->
+
+
+<section id="waits" class="screen">
+
+
+<div class="panel">
+
+
+<div class="board-title">
+
+🎢 VIP Wait Time Board
+
+</div>
+
+
+
+<div class="wait-grid">
+
+
+<div class="wait-row">
+
+Loading VIP favorites...
+
+</div>
+
+
+<div class="wait-row wait-time">
+
+-- min
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- FIREWORKS -->
+
+
+<section id="fireworks" class="screen">
+
+
+<div class="fireworks">
+
+
+<div>
+
+
+<h1>
+
+🎆 Happily Ever After
+
+</h1>
+
+
+<h2>
+
+Magic Kingdom Nighttime Spectacular
+
+</h2>
+
+
+<div class="panel">
+
+Select to watch fireworks
+
+
+<br><br>
+
+
+<button>
+
+WATCH FIREWORKS
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- PIANO -->
+
+
+<section id="piano" class="screen">
+
+
+<div class="piano">
+
+
+<div>
+
+
+<h1>
+
+🎹 The Nightcap Lounge
+
+</h1>
+
+
+<h2>
+
+Live Jazz & Piano Experience
+
+</h2>
+
+
+<div class="panel">
+
+Disney Resort Lounge
+
+<br><br>
+
+Relax and enjoy the evening
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- NAVIGATION -->
+
+
+<div class="channel-bar">
+
+
+<div class="channel selected">
+
+HOME
+
+</div>
+
+
+<div class="channel">
+
+WAIT TIMES
+
+</div>
+
+
+<div class="channel">
+
+FIREWORKS
+
+</div>
+
+
+<div class="channel">
+
+PIANO BAR
+
+</div>
+
+
+</div>
+
+
+
+
+</div>
+
+<script>
+
+const channels = [
+    "home",
+    "waits",
+    "fireworks",
+    "piano"
+];
+
+let currentChannel = 0;
+
+
+/*
+========================
+TRIP SETTINGS
+========================
+*/
+
+let tripDate =
+localStorage.getItem("tripDate")
+|| "2026-12-25";
+
+
+
+/*
+========================
+CLOCK
+========================
+*/
+
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock").innerText =
+    now.toLocaleTimeString([], {
+        hour:"numeric",
+        minute:"2-digit"
+    });
+
 }
-function adjustDateValues(amt) { if (selectedFieldIdx === 0) configMonth = Math.max(1, Math.min(12, configMonth + amt)); else if (selectedFieldIdx === 1) configDay = Math.max(1, Math.min(31, configDay + amt)); else if (selectedFieldIdx === 2) configYear = Math.max(2026, Math.min(2035, configYear + amt)); updateSettingsDisplay(); }
-function updateSettingsDisplay() { ['field-0', 'field-1', 'field-2'].forEach((id, i) => document.getElementById(id).innerText = String([configMonth, configDay, configYear][i]).padStart(i<2?2:1, '0')); }
-function changeChannel(dir) {
-document.getElementById(menu-${currentChannel}).classList.remove('active');
-document.getElementById(view-${currentChannel}).classList.remove('active');
-currentChannel = (currentChannel + dir + 4) % 4;
-document.getElementById(menu-${currentChannel}).classList.add('active');
-document.getElementById(view-${currentChannel}).classList.add('active');
-document.getElementById('park-filter-bar').classList.toggle('visible', currentChannel === 1);
-if (currentChannel === 1) renderRideGrid();
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+
+/*
+========================
+COUNTDOWN
+========================
+*/
+
+function updateCountdown(){
+
+    const target =
+    new Date(tripDate);
+
+    const now =
+    new Date();
+
+
+    let days =
+    Math.ceil(
+        (target-now) /
+        (1000*60*60*24)
+    );
+
+
+    if(days < 0){
+        days = 0;
+    }
+
+
+    document.getElementById("countdown")
+    .innerText =
+    days + " Days";
+
 }
-function changeParkFilter(dir) { document.getElementById(filter-${currentParkFilter}).classList.remove('active'); currentParkFilter = (currentParkFilter + dir + 5) % 5; document.getElementById(filter-${currentParkFilter}).classList.add('active'); renderRideGrid(); }
-async function fetchMasterWaitTimes() {
-let tempRides = [];
-for (const p of PARKS) {
-try {
-const res = await fetch(https://themeparks.wiki{p.id}/live);
-if (!res.ok) continue;
-const data = await res.json();
-if (data?.liveData) data.liveData.filter(r => r.entityType === 'ATTRACTION' && r.status !== 'CLOSED' && r.queue).forEach(r => tempRides.push({ name: r.name, park: p.code, wait: r.queue.STANDBY?.waitTime || 0 }));
-} catch (e) {}
+
+
+setInterval(updateCountdown,60000);
+
+updateCountdown();
+
+
+
+/*
+========================
+CHANNEL CONTROL
+========================
+*/
+
+
+function showChannel(number){
+
+    if(number < 0)
+        number = channels.length-1;
+
+
+    if(number >= channels.length)
+        number = 0;
+
+
+
+    document
+    .querySelectorAll(".screen")
+    .forEach(screen=>{
+        screen.classList.remove("active");
+    });
+
+
+
+    document
+    .getElementById(channels[number])
+    .classList.add("active");
+
+
+
+    document
+    .querySelectorAll(".channel")
+    .forEach((item,index)=>{
+
+        item.classList.toggle(
+            "selected",
+            index === number
+        );
+
+    });
+
+
+    currentChannel = number;
+
+
+    if(number === 1){
+        renderWaitBoard();
+    }
+
 }
-allCachedRides = tempRides.sort((a,b) => b.wait - a.wait);
-renderRideGrid();
+
+
+
+function nextChannel(){
+
+    showChannel(currentChannel + 1);
+
 }
-function renderRideGrid() { const b = document.getElementById('live-board'); if (allCachedRides.length === 0) return; b.innerHTML = ''; allCachedRides.forEach(r => { if (PARK_CODES[currentParkFilter] !== 'ALL' && r.park !== PARK_CODES[currentParkFilter]) return; b.innerHTML += <div class="ride-card ${r.park}"><div><div class="park-tag">${r.park}</div><div class="ride-title">${r.name}</div></div><div class="wait-badge">${r.wait}</div></div>; }); }
-async function fetchDisneyWeather() {
-try {
-const res = await fetch('open-meteo.com');
-const data = await res.json();
-document.getElementById('wdw-temp').innerText = ${Math.round(data.current_weather.temperature)}°F;
-} catch (e) {}
+
+
+
+function previousChannel(){
+
+    showChannel(currentChannel - 1);
+
 }
-function setCountdown() { const diff = new Date(${configMonth}/${configDay}/${configYear}) - new Date(); document.getElementById('days-count').innerText = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))) + " Days"; }
-function updateBackground() { const h = new Date().getHours(); document.body.style.backgroundImage = (h >= 18 || h < 6) ? "url('unsplash.com')" : "url('unsplash.com')"; }
-setCountdown(); updateSettingsDisplay(); fetchMasterWaitTimes(); fetchDisneyWeather(); updateBackground();
-setInterval(fetchMasterWaitTimes, 300000); setInterval(fetchDisneyWeather, 1800000); setInterval(updateBackground, 60000);
+
+
+
+
+/*
+========================
+GOOGLE TV / ONN REMOTE
+========================
+*/
+
+
+document.addEventListener(
+"keydown",
+function(event){
+
+
+switch(event.key){
+
+
+case "ArrowRight":
+
+nextChannel();
+
+break;
+
+
+
+case "ArrowLeft":
+
+previousChannel();
+
+break;
+
+
+
+case "Enter":
+
+selectChannel();
+
+break;
+
+
+
+case "Backspace":
+
+showChannel(0);
+
+break;
+
+
+
+case "v":
+
+openSettings();
+
+break;
+
+
+}
+
+
+
+});
+
+
+
+
+
+function selectChannel(){
+
+
+if(currentChannel === 2){
+
+    openFireworks();
+
+}
+
+
+
+if(currentChannel === 3){
+
+    openPiano();
+
+}
+
+
+}
+
+
+
+
+
+/*
+========================
+VIP WAIT BOARD
+========================
+*/
+
+
+const rides = [
+
+
+{
+name:"👻 Haunted Mansion",
+wait:25,
+favorite:true
+},
+
+
+{
+name:"🟣 Journey Into Imagination with Figment",
+wait:10,
+favorite:true
+},
+
+
+{
+name:"🏴‍☠️ Pirates of the Caribbean",
+wait:20,
+favorite:false
+},
+
+
+{
+name:"🚀 TRON Lightcycle Run",
+wait:65,
+favorite:false
+},
+
+
+{
+name:"⛏ Seven Dwarfs Mine Train",
+wait:55,
+favorite:false
+}
+
+
+];
+
+
+
+
+function renderWaitBoard(){
+
+
+const board =
+document.querySelector(".wait-grid");
+
+
+if(!board)
+return;
+
+
+
+board.innerHTML="";
+
+
+
+rides
+.sort((a,b)=>{
+
+
+if(a.favorite && !b.favorite)
+return -1;
+
+
+if(!a.favorite && b.favorite)
+return 1;
+
+
+return a.wait-b.wait;
+
+
+})
+.forEach(ride=>{
+
+
+board.innerHTML += `
+
+<div class="wait-row">
+
+${ride.name}
+
+</div>
+
+
+<div class="wait-row wait-time">
+
+${ride.wait} min
+
+</div>
+
+`;
+
+});
+
+
+}
+
+
+
+renderWaitBoard();
+
+
+
+
+
+/*
+========================
+FIREWORKS CHANNEL
+========================
+*/
+
+
+function openFireworks(){
+
+
+document.getElementById("fireworks")
+.innerHTML = `
+
+
+<div class="fireworks">
+
+<div>
+
+
+<h1>
+
+🎆 Happily Ever After
+
+</h1>
+
+
+<h2>
+
+Magic Kingdom
+
+</h2>
+
+
+
+<div class="panel">
+
+
+Next Showing
+
+<br><br>
+
+
+9:00 PM
+
+
+<br><br>
+
+
+<button onclick="playFireworks()">
+
+WATCH FIREWORKS
+
+</button>
+
+
+
+</div>
+
+
+</div>
+
+</div>
+
+
+`;
+
+}
+
+
+
+
+function playFireworks(){
+
+
+document.getElementById("fireworks")
+.innerHTML = `
+
+
+<div class="fireworks">
+
+
+<div>
+
+
+<h1>
+
+🎆 Fireworks Mode
+
+</h1>
+
+
+<div class="panel">
+
+Video source will be added here.
+
+<br><br>
+
+This keeps the TV ready
+for a future stream link.
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+}
+
+
+
+
+
+/*
+========================
+PIANO LOUNGE
+========================
+*/
+
+
+function openPiano(){
+
+
+document.getElementById("piano")
+.innerHTML = `
+
+
+<div class="piano">
+
+
+<div>
+
+
+<h1>
+
+🎹 The Nightcap Lounge
+
+</h1>
+
+
+<h2>
+
+Live Jazz & Piano
+
+</h2>
+
+
+
+<div class="panel">
+
+Disney Resort Lounge
+
+<br><br>
+
+🍷 Evening relaxation mode
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+}
+
+
+
+
+
+/*
+========================
+VIP SETTINGS
+========================
+*/
+
+
+function openSettings(){
+
+
+let newDate =
+prompt(
+"Enter trip date YYYY-MM-DD",
+tripDate
+);
+
+
+
+if(newDate){
+
+
+tripDate = newDate;
+
+
+localStorage.setItem(
+"tripDate",
+tripDate
+);
+
+
+
+updateCountdown();
+
+
+}
+
+
+}
+
+
+
+
+/*
+========================
+STARTUP
+========================
+*/
+
+
+showChannel(0);
+
+
+</script>
+
+
+
+</body>
+
+</html>
