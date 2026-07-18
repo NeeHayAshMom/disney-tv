@@ -1330,7 +1330,34 @@ STARTUP
 
 showChannel(0);
 
+/*
+========================
+IPHONE TOUCH CONTROLS
+========================
+*/
 
+document.querySelectorAll(".channel").forEach((button, index) => {
+
+    button.addEventListener("click", function(){
+
+        showChannel(index);
+
+    });
+
+});
+
+
+document.querySelectorAll("button").forEach(button => {
+
+    button.addEventListener("click", function(){
+
+        selectChannel();
+
+    });
+
+});
+
+    
 </script>
 
 
