@@ -124,4 +124,3 @@ function setCountdown() { const diff = new Date(${configMonth}/${configDay}/${co
 function updateBackground() { const h = new Date().getHours(); document.body.style.backgroundImage = (h >= 18 || h < 6) ? "url('unsplash.com')" : "url('unsplash.com')"; }
 setCountdown(); updateSettingsDisplay(); fetchMasterWaitTimes(); fetchDisneyWeather(); updateBackground();
 setInterval(fetchMasterWaitTimes, 300000); setInterval(fetchDisneyWeather, 1800000); setInterval(updateBackground, 60000);
-
