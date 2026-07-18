@@ -75,5 +75,53 @@
             if (e.key === 'Enter' && currentChannel === 0) { toggleSettingsPanel(); return; }
             if (isSettingsOpen) handleSettingsInput(e.key); else handleStandardInput(e.key); 
         });
-        
-        function handleStandardInput(key) { if (key === 'ArrowLeft') changeChannel(-1); else if (key === 'ArrowRight') changeChannel(1); else if (key === 'ArrowUp' && currentChannel === 1) changeParkFilter(-1); else if (key === 'ArrowDown' && currentChannel === 1) changeParkFilter(1); }
+function handleStandardInput(key) { if (key === 'ArrowLeft') changeChannel(-1); else if (key === 'ArrowRight') changeChannel(1); else if (key === 'ArrowUp' && currentChannel === 1) changeParkFilter(-1); else if (key === 'ArrowDown' && currentChannel === 1) changeParkFilter(1); }
+function handleSettingsInput(key) { if (key === 'ArrowLeft' || key === 'ArrowRight') { document.getElementById(field-${selectedFieldIdx}).classList.remove('selected'); selectedFieldIdx = (key === 'ArrowLeft' ? (selectedFieldIdx - 1 + 3) % 3 : (selectedFieldIdx + 1) % 3); document.getElementById(field-${selectedFieldIdx}).classList.add('selected'); } else if (key === 'ArrowUp') adjustDateValues(1); else if (key === 'ArrowDown') adjustDateValues(-1); }
+function setChannelViaMouse(target) { if (!isSettingsOpen) changeChannel(target - currentChannel); }
+function setParkViaMouse(target) { document.getElementById(filter-${currentParkFilter}).classList.remove('active'); currentParkFilter = target; document.getElementById(filter-${currentParkFilter}).classList.add('active'); renderRideGrid(); }
+function adjustDateValuesMouse(idx, amt) { document.getElementById(field-${selectedFieldIdx}).classList.remove('selected'); selectedFieldIdx = idx; document.getElementById(field-${selectedFieldIdx}).classList.add('selected'); adjustDateValues(amt); }
+function toggleSettingsPanel() {
+isSettingsOpen = !isSettingsOpen;
+const p = document.getElementById('settings-ui'), h = document.getElementById('panel-hint');
+p.classList.toggle('visible');
+h.innerText = isSettingsOpen ? "Click Save Settings or press Enter/OK to finalize" : "Click numbers or press Enter/OK on remote to edit trip date";
+if (!isSettingsOpen) { localStorage.setItem('dw_month', configMonth); localStorage.setItem('dw_day', configDay); localStorage.setItem('dw_year', configYear); setCountdown(); } else updateSettingsDisplay();
+}
+function adjustDateValues(amt) { if (selectedFieldIdx === 0) configMonth = Math.max(1, Math.min(12, configMonth + amt)); else if (selectedFieldIdx === 1) configDay = Math.max(1, Math.min(31, configDay + amt)); else if (selectedFieldIdx === 2) configYear = Math.max(2026, Math.min(2035, configYear + amt)); updateSettingsDisplay(); }
+function updateSettingsDisplay() { ['field-0', 'field-1', 'field-2'].forEach((id, i) => document.getElementById(id).innerText = String([configMonth, configDay, configYear][i]).padStart(i<2?2:1, '0')); }
+function changeChannel(dir) {
+document.getElementById(menu-${currentChannel}).classList.remove('active');
+document.getElementById(view-${currentChannel}).classList.remove('active');
+currentChannel = (currentChannel + dir + 4) % 4;
+document.getElementById(menu-${currentChannel}).classList.add('active');
+document.getElementById(view-${currentChannel}).classList.add('active');
+document.getElementById('park-filter-bar').classList.toggle('visible', currentChannel === 1);
+if (currentChannel === 1) renderRideGrid();
+}
+function changeParkFilter(dir) { document.getElementById(filter-${currentParkFilter}).classList.remove('active'); currentParkFilter = (currentParkFilter + dir + 5) % 5; document.getElementById(filter-${currentParkFilter}).classList.add('active'); renderRideGrid(); }
+async function fetchMasterWaitTimes() {
+let tempRides = [];
+for (const p of PARKS) {
+try {
+const res = await fetch(https://themeparks.wiki{p.id}/live);
+if (!res.ok) continue;
+const data = await res.json();
+if (data?.liveData) data.liveData.filter(r => r.entityType === 'ATTRACTION' && r.status !== 'CLOSED' && r.queue).forEach(r => tempRides.push({ name: r.name, park: p.code, wait: r.queue.STANDBY?.waitTime || 0 }));
+} catch (e) {}
+}
+allCachedRides = tempRides.sort((a,b) => b.wait - a.wait);
+renderRideGrid();
+}
+function renderRideGrid() { const b = document.getElementById('live-board'); if (allCachedRides.length === 0) return; b.innerHTML = ''; allCachedRides.forEach(r => { if (PARK_CODES[currentParkFilter] !== 'ALL' && r.park !== PARK_CODES[currentParkFilter]) return; b.innerHTML += <div class="ride-card ${r.park}"><div><div class="park-tag">${r.park}</div><div class="ride-title">${r.name}</div></div><div class="wait-badge">${r.wait}</div></div>; }); }
+async function fetchDisneyWeather() {
+try {
+const res = await fetch('open-meteo.com');
+const data = await res.json();
+document.getElementById('wdw-temp').innerText = ${Math.round(data.current_weather.temperature)}°F;
+} catch (e) {}
+} [1]
+function setCountdown() { const diff = new Date(${configMonth}/${configDay}/${configYear}) - new Date(); document.getElementById('days-count').innerText = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24))) + " Days"; }
+function updateBackground() { const h = new Date().getHours(); document.body.style.backgroundImage = (h >= 18 || h < 6) ? "url('unsplash.com')" : "url('unsplash.com')"; }
+setCountdown(); updateSettingsDisplay(); fetchMasterWaitTimes(); fetchDisneyWeather(); updateBackground();
+setInterval(fetchMasterWaitTimes, 300000); setInterval(fetchDisneyWeather, 1800000); setInterval(updateBackground, 60000);
+
