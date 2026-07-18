@@ -1202,15 +1202,18 @@ let rides = [];
 const MAGIC_KINGDOM_ID =
 "75ea578a-adc8-4116-a54d-dccb60765ef9";
 
+
 async function loadDisneyWaitTimes(){
 
-    try{
+    try {
 
         const response = await fetch(
             `https://api.themeparks.wiki/v1/entity/${MAGIC_KINGDOM_ID}/live`
         );
 
+
         const data = await response.json();
+
 
         rides = data.liveData
 
@@ -1219,90 +1222,124 @@ async function loadDisneyWaitTimes(){
             ride.queue.STANDBY
         )
 
-        .map(ride=>({
 
-            name:ride.name,
+        .map(ride => ({
 
-            wait:ride.queue.STANDBY.waitTime || 0,
+            name: ride.name,
 
-            favorite:[
+            wait:
+            ride.queue.STANDBY.waitTime ?? 0,
+
+
+            favorite:
+            [
                 "Haunted Mansion",
                 "Pirates of the Caribbean",
-                "Journey Into Imagination With Figment",
                 "Seven Dwarfs Mine Train",
                 "TRON Lightcycle / Run",
                 "Space Mountain"
-            ].includes(ride.name)
+            ]
+
+            .includes(ride.name)
 
         }));
 
-        function renderWaitBoard(){
 
-    const board =
-    document.getElementById("wait-grid");
+        renderWaitBoard();
 
-    board.innerHTML="";
-
-    rides
-
-    .sort((a,b)=>{
-
-        if(a.favorite&&!b.favorite)return -1;
-        if(!a.favorite&&b.favorite)return 1;
-
-        return a.wait-b.wait;
-
-    })
-
-    .forEach(ride=>{
-
-        board.innerHTML += `
-
-        <div class="wait-row">
-
-            ${ride.name}
-
-        </div>
-
-        <div class="wait-row wait-time">
-
-            ${ride.wait} min
-
-        </div>
-
-        `;
-
-    });
-
-    const bestRide =
-    rides
-    .filter(r=>r.favorite)
-    .sort((a,b)=>a.wait-b.wait)[0];
-
-    if(bestRide){
-
-        document.getElementById("vip-tip").innerHTML=
-
-        `⭐ Ride Now: <b>${bestRide.name}</b> (${bestRide.wait} min)`;
 
     }
 
-};
-
-    }
 
     catch(error){
 
-        console.error(error);
+        console.error(
+            "Disney Wait Error:",
+            error
+        );
+
+
+        document.getElementById("vip-tip")
+        .innerHTML =
+        "⚠️ Wait times unavailable";
 
     }
 
 }
 
-setInterval(loadDisneyWaitTimes,300000);
+
+
+
+function renderWaitBoard(){
+
+
+const board =
+document.getElementById("wait-grid");
+
+
+if(!board)return;
+
+
+board.innerHTML="";
+
+
+rides
+
+.sort((a,b)=>a.wait-b.wait)
+
+
+.forEach(ride=>{
+
+
+board.innerHTML += `
+
+<div class="wait-row">
+
+${ride.favorite ? "⭐ " : ""}
+${ride.name}
+
+</div>
+
+
+<div class="wait-row wait-time">
+
+${ride.wait} min
+
+</div>
+
+`;
+
+});
+
+
+const bestRide =
+rides[0];
+
+
+if(bestRide){
+
+
+document.getElementById("vip-tip")
+.innerHTML =
+
+`⭐ VIP Recommendation:
+<b>${bestRide.name}</b>
+(${bestRide.wait} min)`;
+
+}
+
+
+}
+
+
+
+setInterval(
+loadDisneyWaitTimes,
+300000
+);
+
 
 loadDisneyWaitTimes();
-
 
 
 
